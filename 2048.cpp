@@ -1,5 +1,3 @@
-﻿// 2048.cpp: Definuje vstupní bod pro aplikaci.
-//
 
 #include "2048.h"
 #include <stdio.h>
@@ -8,27 +6,35 @@
 
 #define SIZE 4
 
-int board[SIZE][SIZE];
+int board[SIZE][SIZE]; //herní deska 4x4
 int score = 0;
 
-void initializeBoard() {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
+void initializeBoard() //hodnoty herní desky na hodnotu 0
+{
+    for (int i = 0; i < SIZE; i++) 
+    {
+        for (int j = 0; j < SIZE; j++) 
+        {
             board[i][j] = 0;
         }
     }
 }
 
-void printBoard() {
+void printBoard() //tisk aktuálního stavu herní desky
+{
     system("cls");
     printf("Vitej ve hre 2048\nHra se ovlada klavesami W (nahoru) - A (doleva) - S (dolu) - D (doprava)\n");
     printf("Score: %d\n", score);
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            if (board[i][j] == 0) {
+    for (int i = 0; i < SIZE; i++) 
+    {
+        for (int j = 0; j < SIZE; j++) 
+        {
+            if (board[i][j] == 0) 
+            {
                 printf("  . ");
             }
-            else {
+            else 
+            {
                 printf("%4d", board[i][j]);
             }
         }
@@ -36,12 +42,16 @@ void printBoard() {
     }
 }
 
-int getRandomEmptyCell() {
+int getRandomEmptyCell() //hledání prádného pole
+{
     int emptyCells[SIZE * SIZE];
     int count = 0;
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            if (board[i][j] == 0) {
+    for (int i = 0; i < SIZE; i++) 
+    {
+        for (int j = 0; j < SIZE; j++) 
+        {
+            if (board[i][j] == 0) 
+            {
                 emptyCells[count] = i * SIZE + j;
                 count++;
             }
@@ -49,12 +59,14 @@ int getRandomEmptyCell() {
     }
     if (count == 0) return -1;
     int randomIndex = rand() % count;
-    return emptyCells[randomIndex];
+    return emptyCells[randomIndex]; //vrací pozici vybrané prázdné buňky
 }
 
-void addRandomTile() {
+void addRandomTile() //vyvolání funkce getRandomEmptyCell a umístění náhodného čísla
+{
     int cell = getRandomEmptyCell();
-    if (cell != -1) {
+    if (cell != -1) 
+    {
         int value = (rand() % 2 + 1) * 2;
         int row = cell / SIZE;
         int col = cell % SIZE;
@@ -62,14 +74,19 @@ void addRandomTile() {
     }
 }
 
-int isGameOver() {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            if (board[i][j] == 0) {
+int isGameOver() //procházení buněk a kontrola možnosti pokračování hry
+{
+    for (int i = 0; i < SIZE; i++) 
+    {
+        for (int j = 0; j < SIZE; j++) 
+        {
+            if (board[i][j] == 0) 
+            {
                 return 0;
             }
             if ((i < SIZE - 1 && board[i][j] == board[i + 1][j]) ||
-                (j < SIZE - 1 && board[i][j] == board[i][j + 1])) {
+                (j < SIZE - 1 && board[i][j] == board[i][j + 1])) 
+            {
                 return 0;
             }
         }
@@ -77,24 +94,32 @@ int isGameOver() {
     return 1;
 }
 
-void moveLeft() {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 1; j < SIZE; j++) {
-            if (board[i][j] != 0) {
+void moveLeft() //pohyb čísel na herní desce, slučování dvou stejných čísel, zaznamenávání skóre
+{
+    for (int i = 0; i < SIZE; i++) 
+    {
+        for (int j = 1; j < SIZE; j++) 
+        {
+            if (board[i][j] != 0) 
+            {
                 int k = j - 1;
-                while (k >= 0) {
-                    if (board[i][k] == 0) {
+                while (k >= 0) 
+                {
+                    if (board[i][k] == 0) 
+                    {
                         board[i][k] = board[i][k + 1];
                         board[i][k + 1] = 0;
                         k--;
                     }
-                    else if (board[i][k] == board[i][k + 1]) {
+                    else if (board[i][k] == board[i][k + 1]) 
+                    {
                         board[i][k] *= 2;
                         score += board[i][k];
                         board[i][k + 1] = 0;
                         break;
                     }
-                    else {
+                    else 
+                    {
                         break;
                     }
                 }
@@ -103,24 +128,32 @@ void moveLeft() {
     }
 }
 
-void moveRight() {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = SIZE - 2; j >= 0; j--) {
-            if (board[i][j] != 0) {
+void moveRight() 
+{
+    for (int i = 0; i < SIZE; i++) 
+    {
+        for (int j = SIZE - 2; j >= 0; j--) 
+        {
+            if (board[i][j] != 0) 
+            {
                 int k = j + 1;
-                while (k < SIZE) {
-                    if (board[i][k] == 0) {
+                while (k < SIZE) 
+                {
+                    if (board[i][k] == 0) 
+                    {
                         board[i][k] = board[i][k - 1];
                         board[i][k - 1] = 0;
                         k++;
                     }
-                    else if (board[i][k] == board[i][k - 1]) {
+                    else if (board[i][k] == board[i][k - 1]) 
+                    {
                         board[i][k] *= 2;
                         score += board[i][k];
                         board[i][k - 1] = 0;
                         break;
                     }
-                    else {
+                    else 
+                    {
                         break;
                     }
                 }
@@ -129,24 +162,32 @@ void moveRight() {
     }
 }
 
-void moveUp() {
-    for (int j = 0; j < SIZE; j++) {
-        for (int i = 1; i < SIZE; i++) {
-            if (board[i][j] != 0) {
+void moveUp() 
+{
+    for (int j = 0; j < SIZE; j++) 
+    {
+        for (int i = 1; i < SIZE; i++) 
+        {
+            if (board[i][j] != 0) 
+            {
                 int k = i - 1;
-                while (k >= 0) {
-                    if (board[k][j] == 0) {
+                while (k >= 0) 
+                {
+                    if (board[k][j] == 0) 
+                    {
                         board[k][j] = board[k + 1][j];
                         board[k + 1][j] = 0;
                         k--;
                     }
-                    else if (board[k][j] == board[k + 1][j]) {
+                    else if (board[k][j] == board[k + 1][j]) 
+                    {
                         board[k][j] *= 2;
                         score += board[k][j];
                         board[k + 1][j] = 0;
                         break;
                     }
-                    else {
+                    else 
+                    {
                         break;
                     }
                 }
@@ -156,23 +197,29 @@ void moveUp() {
 }
 
 void moveDown() {
-    for (int j = 0; j < SIZE; j++) {
-        for (int i = SIZE - 2; i >= 0; i--) {
-            if (board[i][j] != 0) {
+    for (int j = 0; j < SIZE; j++) 
+    {
+        for (int i = SIZE - 2; i >= 0; i--) 
+        {
+            if (board[i][j] != 0) 
+            {
                 int k = i + 1;
                 while (k < SIZE) {
-                    if (board[k][j] == 0) {
+                    if (board[k][j] == 0) 
+                    {
                         board[k][j] = board[k - 1][j];
                         board[k - 1][j] = 0;
                         k++;
                     }
-                    else if (board[k][j] == board[k - 1][j]) {
+                    else if (board[k][j] == board[k - 1][j]) 
+                    {
                         board[k][j] *= 2;
                         score += board[k][j];
                         board[k - 1][j] = 0;
                         break;
                     }
-                    else {
+                    else 
+                    {
                         break;
                     }
                 }
@@ -181,16 +228,20 @@ void moveDown() {
     }
 }
 
-int main() {
+
+int main() //nekonečná smyčka
+{
     initializeBoard();
     addRandomTile();
     addRandomTile();
     printBoard();
 
     int key;
-    while (1) {
-        key = _getch();
-        switch (key) {
+    while (1) 
+    {
+        key = _getch();  //čtení klávesy z konzole
+        switch (key) //zpracovávání stisknuté klávesy hráče
+        {
         case 'a':
             moveLeft();
             break;
@@ -207,15 +258,16 @@ int main() {
             exit(0);
             break;
         }
-        if (isGameOver()) {
+        if (isGameOver()) 
+        {
             printf("Hra skoncila, neexistuje dalsi platny tah.\n");
             break;
         }
-        if (key == 'a' || key == 'd' || key == 'w' || key == 's') {
+        if (key == 'a' || key == 'd' || key == 'w' || key == 's') 
+        {
             addRandomTile();
         }
         printBoard();
     }
     return 0;
 }
-
